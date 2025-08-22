@@ -1,0 +1,1 @@
+php -d variables_order=GPCS artisan serve
