@@ -25,6 +25,41 @@ class ObservationMaterialRepository {
         return null;
     }
 
+    public function allByTitle($title, $pages) {
+        try {
+            $query = ObservationMaterial::with('material')
+                ->where('title', '=', $title)
+                ->orderBy('id', 'ASC');
+
+            if ($pages == 0)
+                return $query->get();
+
+            return $query->paginate($pages);
+
+        }catch (\Exception $exception) {
+
+        }
+        return null;
+    }
+
+    public function allDistinctTitles($pages) {
+        try {
+
+            $query = ObservationMaterial::select('title')
+                ->distinct();
+
+            if ($pages == 0)
+                return $query->get();
+
+            return $query->paginate($pages);
+
+        }catch (\Exception $exception) {
+
+        }
+        return null;
+    }
+
+
     /***
      * @param $id
      * @return ObservationMaterial

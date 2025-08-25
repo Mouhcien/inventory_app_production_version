@@ -624,7 +624,19 @@ class InventoryController extends Controller
         $photocopies = $this->inventoryPhotocopyService->getAllInventories($this->pages);
 
         return view('inventories.photocopies.index', [
-            'photocopies' => $photocopies
+            'photocopies' => $photocopies,
+            'option' => null
+        ]);
+    }
+
+    public function vacant_photocopies() {
+
+        $photocopies = $this->materialService->getPhotocopiesNotAffectedToUser($this->pages);
+        //dd($photocopies);
+
+        return view('inventories.photocopies.index', [
+            'photocopies' => $photocopies,
+            'option' => 'photocopy_vacant'
         ]);
     }
 
@@ -675,6 +687,8 @@ class InventoryController extends Controller
 
         }
     }
+
+
 
 
 }

@@ -327,6 +327,8 @@ Route::prefix("materials")->group(function() {
 
     Route::get('/export', [MaterialController::class, 'export'])->name('materials.export');
 
+    Route::get('/observations', [MaterialController::class, 'observations'])->name('materials.observations');
+
     Route::get('/filter/advance', [MaterialController::class, 'advance'])->name('materials.advance');
 
     Route::get('/filter/advance/result', [MaterialController::class, 'fresult'])->name('materials.fresult');
@@ -484,7 +486,7 @@ Route::prefix("inventories")->group(function () {
     Route::prefix("statistics")->group(function () {
         Route::get('/', [StatisticController::class, 'index'])->name('statistics.index');
 
-        Route::get('/ ', [StatisticController::class, 'material'])->name('statistics.material');
+        Route::get('/materials', [StatisticController::class, 'material'])->name('statistics.material');
 
         Route::get('/employees', [StatisticController::class, 'employee'])->name('statistics.employee');
 
@@ -510,6 +512,8 @@ Route::prefix("inventories")->group(function () {
     Route::get('/photocopies/edit/{id}', [InventoryController::class, 'photocopies_edit'])->name('inventories.photocopies.edit');
 
     Route::get('/photocopies/export', [InventoryController::class, 'export_photocopies'])->name('inventories.photocopies.export');
+
+    Route::get('/photocopies/vacant', [InventoryController::class, 'vacant_photocopies'])->name('inventories.photocopies.vacant');
 
     Route::post('/photocopies/update/{id}', [InventoryController::class, 'photocopies_update'])->name('inventories.photocopies.update');
 

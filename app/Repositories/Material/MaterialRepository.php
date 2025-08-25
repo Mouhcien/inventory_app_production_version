@@ -274,6 +274,22 @@ class MaterialRepository {
         return $query->get();
     }
 
+    public function getPhotocopiesNotAffectedToUser($pages)
+    {
+        $query = Material::with(['delivery_material', 'observations_material'])
+            ->join('delivery_materials', 'delivery_materials.id', '=', 'materials.delivery_material_id')
+            ->join('model_materials', 'model_materials.id', '=', 'delivery_materials.model_material_id')
+            ->leftJoin('inventory_photocopies', 'inventory_photocopies.material_id', '=', 'materials.id')
+            ->whereNull('inventory_photocopies.material_id')
+            ->where('model_materials.type_material_id', '=', '5')
+            ->select('materials.*');
+
+        if ($pages != 0)
+            return $query->paginate($pages);
+
+        return $query->get();
+    }
+
     public function getMaterialsNotAffectedToUserWithoutBigPrinters($pages)
     {
         $query = Material::with(['delivery_material', 'observations_material'])

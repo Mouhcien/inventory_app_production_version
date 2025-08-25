@@ -109,6 +109,10 @@
                     </div>
                 </div>
             </div>
+
+            <div>
+                <a href="{{route('materials.observations')}}" class="btn btn-info" ><i class="bi bi-list-task"></i> Consulter les observations du matériels </a>
+            </div>
         </div>
     </div>
 

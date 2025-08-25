@@ -494,7 +494,6 @@ class InventoryRepository {
     function getInventoryHistoryByMaterial($material, $pages) {
         $req = Inventory::with(['material', 'employee'])
                 ->where('inventories.material_id', '=', $material)
-                ->where('inventories.is_active', '=', 1)
                 ->orderBy('created_at', 'DESC');
 
         if ($pages == 0)

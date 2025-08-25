@@ -163,6 +163,14 @@ class MaterialService {
         }
     }
 
+    public function getPhotocopiesNotAffectedToUser($pages=0) {
+        try {
+            return $this->materialRepository->getPhotocopiesNotAffectedToUser($pages);
+        }catch (\Exception $exception) {
+
+        }
+    }
+
     public function getMaterialsNotAffectedToUserWithoutBigPrinters($pages=0) {
         try {
             return $this->materialRepository->getMaterialsNotAffectedToUserWithoutBigPrinters($pages);

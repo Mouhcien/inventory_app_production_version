@@ -10,6 +10,7 @@ use App\Services\Material\DeliveryMaterialService;
 use App\Services\Material\MarchMaterialService;
 use App\Services\Material\MaterialService;
 use App\Services\Material\ModelMaterialService;
+use App\Services\Material\ObservationMaterialService;
 use App\Services\Material\TypeMaterialService;
 use DateTime;
 use Illuminate\Http\Request;
@@ -26,6 +27,7 @@ class MaterialController extends Controller
     private ModelMaterialService $modelMaterialService;
     private MarchMaterialService  $marchMaterialService;
     private InventoryService $inventoryService;
+    private ObservationMaterialService $observationMaterialService;
     private int $pages = 10;
     private array $rules = [
         'serial'            => 'required|max:255',
@@ -41,7 +43,8 @@ class MaterialController extends Controller
                                 BrandMaterialService $brandMaterialService,
                                 ModelMaterialService $modelMaterialService,
                                 MarchMaterialService  $marchMaterialService,
-                                InventoryService $inventoryService
+                                InventoryService $inventoryService,
+                                ObservationMaterialService  $observationMaterialService
     )
     {
         $this->materialService = $materialService;
@@ -51,6 +54,7 @@ class MaterialController extends Controller
         $this->modelMaterialService = $modelMaterialService;
         $this->marchMaterialService = $marchMaterialService;
         $this->inventoryService = $inventoryService;
+        $this->observationMaterialService = $observationMaterialService;
     }
 
 
@@ -525,10 +529,10 @@ class MaterialController extends Controller
                     $material = $this->materialService->getOneMaterialBySerial($serial);
                     if (is_null($material)) {
                         $serials_err .= "[ ".$serial." ] - ";
-                        continue;   
+                        continue;
                     }
-                        
-                    
+
+
                     $data['ip']  = $ip;
 
                     $this->materialService->updateMaterial($material, $data);
@@ -549,4 +553,21 @@ class MaterialController extends Controller
             return Redirect::route('materials.ip.import')->with('error', "Une erreur technique est survenue pendant la création de matériel");
         }
     }
+
+    public function observations(Request $request) {
+
+        $observations = $this->observationMaterialService->getAllMaterialObservations($this->pages);
+        $titles = $this->observationMaterialService->getallDistinctTitles(0);
+
+        if ($request->has('fltr')) {
+            $title = $request->query('fltr');
+            $observations = $this->observationMaterialService->getAllMaterialObservationsByTitle($title, $this->pages);
+        }
+
+        return view('materials.observations.index', [
+            'observations' => $observations,
+            'titles' => $titles
+        ]);
+    }
+
 }

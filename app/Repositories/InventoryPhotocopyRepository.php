@@ -24,7 +24,6 @@ class InventoryPhotocopyRepository {
         }catch (\Exception $exception) {
 
         }
-        return null;
     }
 
     /***

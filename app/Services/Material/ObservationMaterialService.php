@@ -30,6 +30,21 @@ class ObservationMaterialService {
         }
     }
 
+    public function getAllDistinctTitles($pages){
+        try {
+            return $this->observationMaterialRepository->allDistinctTitles($pages);
+        }catch (Exception $ex) {
+
+        }
+    }
+    public function getAllMaterialObservationsByTitle($title, $pages){
+        try {
+            return $this->observationMaterialRepository->allByTitle($title, $pages);
+        }catch (Exception $ex) {
+
+        }
+    }
+
     /***
      * @param $id
      * @return ObservationMaterial

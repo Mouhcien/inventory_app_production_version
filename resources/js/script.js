@@ -1127,6 +1127,14 @@ $(function(){
         window.location.href = url;
     });
 
+    /** ******************************************* **/
+
+    $("#sl_title_observation").on('change', function (){
+        let title = $(this).val();
+        let url = '/materials/observations/?fltr='+title;
+        window.location.href = url;
+    });
+
 });
 
 
