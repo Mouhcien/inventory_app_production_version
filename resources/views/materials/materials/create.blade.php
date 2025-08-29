@@ -57,14 +57,14 @@
                         <ul class="list-group">
                             @foreach($deliveries as $delivery)
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    @if($id != null && $delivery->model_material->id == $id)
+                                    @if($id != null && $editedMaterial != null && $delivery->id == $editedMaterial->delivery_material->id)
                                         <x-radio-input
                                             label="{{$delivery->model_material->title}} - {{$delivery->march_material->title}}"
                                             name="delivery_material_id"
                                             class="form-check-input"
                                             id="delivery_material_id"
                                             value="{{$delivery->id}}"
-                                            checked="true"
+                                            :checked="true"
                                         />
                                     @else
                                         <x-radio-input
@@ -73,7 +73,7 @@
                                             class="form-check-input"
                                             id="delivery_material_id"
                                             value="{{$delivery->id}}"
-                                            checked="false"
+                                            :checked="false"
                                         />
                                     @endif
                                     <span title="Nombres de matériels" class="badge bg-primary rounded-pill">{{count($delivery->materials)}}</span>
