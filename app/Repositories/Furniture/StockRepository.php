@@ -14,11 +14,51 @@ class StockRepository {
      */
     public function all($pages) {
         try {
+            $query = StockConsumable::with(['consumable', 'delivery', 'consummations'])->orderBy('delivery_id', 'DESC');
+            if ($pages == 0)
+                return $query->get();
+
+            return $query->paginate($pages);
+
+        }catch (\Exception $exception) {
+
+        }
+        return null;
+    }
+
+    public function allTotalExistingStock($filter, $value, $pages) {
+        try {
+            $query = StockConsumable::query()
+                ->join('consumables', 'consumables.id', '=', 'stock_consumables.consumable_id')
+                ->join('type_consumables', 'type_consumables.id', '=', 'consumables.type_consumable_id')
+                ->select(
+                            DB::raw('MIN(stock_consumables.id) as id'), // pick one id per group
+                            'stock_consumables.consumable_id as consumable_id',
+                            'consumables.type_consumable_id',
+                            'consumables.ref as ref',
+                            'consumables.image as image',
+                            'type_consumables.title as type',
+                            DB::raw('SUM(stock_consumables.quantity_received) as quantity_received'),
+                            DB::raw('SUM(stock_consumables.quantity_rest) as quantity_rest')
+                );
+
+            if (!is_null($filter) && !is_null($value)) {
+                switch ($filter) {
+                    case 'type':
+                        $query->where('consumables.type_consumable_id', '=', $value);
+                        break;
+                    case 'consumable':
+                        $query->where('stock_consumables.consumable_id', '=', $value);
+                        break;
+                }
+            }
+
+            $query->groupBy('stock_consumables.consumable_id', 'consumables.ref',  'type_consumables.title', 'consumables.type_consumable_id', 'consumables.image');
 
             if ($pages == 0)
-                return StockConsumable::with(['consumable', 'delivery', 'consummations'])->orderBy('delivery_id', 'DESC')->get();
+                return $query->get();
 
-            return StockConsumable::with('consumable', 'delivery', 'consummations')->orderBy('delivery_id', 'DESC')->paginate($pages);
+            return $query->paginate($pages);
 
         }catch (\Exception $exception) {
 

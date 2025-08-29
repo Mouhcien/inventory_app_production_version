@@ -201,9 +201,67 @@ class StockController extends Controller
 
             return $this->exportStockConsumables($this->stockService, $filter, $value);
 
+        }catch (Exception $exception) {
+
+        }
+    }
+
+    public function short_download(Request $request) {
+        try {
+
+            $filter = null;
+            $value = null;
+            if ($request->has('fltr') && $request->has('val')) {
+                $filter = $request->query('fltr');
+                $value = $request->query('val');
+            }
+
+            return $this->exportShortStockConsumables($this->stockService, $filter, $value);
 
         }catch (Exception $exception) {
 
         }
     }
+
+    public function short(Request $request) {
+        try {
+
+            $types = $this->typeConsumableService->getAllConsumableTypes(0);
+            $consumables = $this->consumableService->getAllConsumables(0);
+            $models_printers = $this->modelMaterialService->getAllModelsByTypeTitle("Imprimante", 0);
+            $models_big_printers = $this->modelMaterialService->getAllModelsByTypeTitle("Photocopie", 0);
+
+            $stocks = $this->stockService->allTotalExistingStock(null, null, $this->pages);
+
+            $filter = null;
+            $value = null;
+            if ($request->has('fltr') && $request->has('val')) {
+                $filter = $request->query('fltr');
+                $value = $request->query('val');
+                switch ($filter) {
+                    case 'type':
+                        $stocks = $this->stockService->allTotalExistingStock($filter, $value, $this->pages);
+                        break;
+                    case 'consumable':
+                        $stocks = $this->stockService->allTotalExistingStock($filter, $value, $this->pages);
+                        break;
+                }
+            }
+
+            return view("funitures.stocks.stock-short", [
+                'types' => $types,
+                'consumables' => $consumables,
+                'models_printers' => $models_printers,
+                'models_big_printers' => $models_big_printers,
+                'stocks'      => $stocks,
+                'filter' => $filter,
+                'value' => $value,
+            ]);
+
+
+        }catch (Exception $exception) {
+
+        }
+    }
+
 }

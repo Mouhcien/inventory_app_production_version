@@ -56,11 +56,7 @@
                         @endforelse
                         </tbody>
                     </table>
-                    <div class="mt-2">
-                        <ul class="pagination pagination-sm">
-                            {{ $deliveries->links() }}
-                        </ul>
-                    </div>
+                    <x-pagination-row :data="$deliveries" />
                 </div>
             </div>
         </div>

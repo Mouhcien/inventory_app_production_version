@@ -55,11 +55,7 @@
                         @endforelse
                         </tbody>
                     </table>
-                    <div class="mt-2">
-                        <ul class="pagination pagination-sm">
-                            {{ $consumables->links() }}
-                        </ul>
-                    </div>
+                    <x-pagination-row :data="$consumables" />
                 </div>
             </div>
         </div>

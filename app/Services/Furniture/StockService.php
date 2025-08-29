@@ -30,6 +30,14 @@ class StockService {
         }
     }
 
+    public function allTotalExistingStock($filter, $value, $pages){
+        try {
+            return $this->stockRepository->allTotalExistingStock($filter, $value, $pages);
+        }catch (Exception $ex) {
+
+        }
+    }
+
     public function getAllStockConsumablesByYear($year, $pages){
         try {
             return $this->stockRepository->allByDeliveryYear($year, $pages);

@@ -6,6 +6,7 @@ use App\Exports\ConsummationExport;
 use App\Exports\InventoryExport;
 use App\Exports\InventoryPhotocopyExport;
 use App\Exports\MaterialExport;
+use App\Exports\ShortStockConsumable;
 use App\Exports\StockConsumableExport;
 use App\Services\Furniture\ConsummationService;
 use App\Services\Furniture\StockService;
@@ -245,6 +246,36 @@ abstract class Controller
             $date = new DateTime();
             $current_date =  $date->format('Y-m-d H:i:s');
             return Excel::download(new StockConsumableExport($data), 'stock_fournitures'.$current_date.'.xlsx');
+
+        }catch (\Exception $exception) {
+            return $exception->getMessage();
+        }
+    }
+
+    public function exportShortStockConsumables(StockService $stockService, $filter=null, $value=null) {
+        try {
+
+            //['Consommable', 'Type', 'Quantité livré', 'Quantité resté']
+
+            if (is_null($filter))
+                $stocks = $stockService->allTotalExistingStock(null, null,0);
+            else {
+                $stocks = $stockService->allTotalExistingStock($filter, $value,0);
+            }
+
+            $stockData = [];
+            $data = [];
+            foreach ($stocks as $stock) {
+                $stockData[0] = $stock->ref;
+                $stockData[1] = $stock->type;
+                $stockData[2] = $stock->quantity_received;
+                $stockData[3] = $stock->quantity_rest;
+
+                $data[] = $stockData;
+            }
+            $date = new DateTime();
+            $current_date =  $date->format('Y-m-d H:i:s');
+            return Excel::download(new ShortStockConsumable($data), 'stock_fournitures'.$current_date.'.xlsx');
 
         }catch (\Exception $exception) {
             return $exception->getMessage();

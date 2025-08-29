@@ -429,6 +429,10 @@ Route::prefix("furnitures")->group(function() {
 
         Route::get('/', [StockController::class, 'index'])->name('stocks.index');
 
+        Route::get('/short', [StockController::class, 'short'])->name('stocks.short');
+
+        Route::get('/short/download', [StockController::class, 'short_download'])->name('stocks.short.download');
+
         Route::get('/export/{filter?}/{value?}', [StockController::class, 'export'])->name('stocks.export');
 
         Route::get('/filter/{filter}/{value}', [StockController::class, 'filter'])->name('stocks.filter');

@@ -39,11 +39,7 @@
                         @endforelse
                         </tbody>
                     </table>
-                    <div class="mt-2">
-                        <ul class="pagination pagination-sm">
-                            {{ $types->links() }}
-                        </ul>
-                    </div>
+                    <x-pagination-row :data="$types" />
                 </div>
             </div>
         </div>

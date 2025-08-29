@@ -11,12 +11,20 @@
                     </h5>
                 </div>
                 <div class="col-4">
-                    <select class="form-control-sm form-control shadow-lg" name="delivery_year" id="sl_stock_delivery_year">
-                        <option value="0"> Séléctionnez l'anné de livraison </option>
-                        @foreach($years as $year)
-                            <option {{$year->year == $selectedYear ? 'selected': ''}} value="{{$year->year}}"> {{$year->year}} </option>
-                        @endforeach
-                    </select>
+                    <div class="row col-12">
+                        <div class="col-6">
+                            <a href="{{route('stocks.short')}}" >Version résumé</a>
+                        </div>
+                        <div class="col-6">
+                            <select class="form-control-sm form-control shadow-lg" name="delivery_year" id="sl_stock_delivery_year">
+                                <option value="0"> Séléctionnez l'anné de livraison </option>
+                                @foreach($years as $year)
+                                    <option {{$year->year == $selectedYear ? 'selected': ''}} value="{{$year->year}}"> {{$year->year}} </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
                 </div>
                 <div class="col-4">
                     <a href="{{route('stocks.export', ['filter' => $filter, 'value' => $value])}}" class="text-success me-2 float-end" >
@@ -45,7 +53,9 @@
                         <td class="align-content-center">
                             <span class="badge bg-light">{{ $stock->consumable->ref }} </span>
                         </td>
-                        <td class="align-content-center"> {{ $stock->consumable->type_consumable->title }}</td>
+                        <td class="align-content-center">
+                            <span class="badge bg-light">{{ $stock->consumable->type_consumable->title }}</span>
+                        </td>
                         <td class="align-content-center">
                             @if(count($stock->consumable->fittings) != 0)
                                 @foreach($stock->consumable->fittings as $fitting)
@@ -70,11 +80,7 @@
                 @endforelse
                 </tbody>
             </table>
-            <div class="mt-2">
-                <ul class="pagination pagination-sm">
-                    {{ $stocks->links() }}
-                </ul>
-            </div>
+            <x-pagination-row :data="$stocks" />
         </div>
     </div>
 

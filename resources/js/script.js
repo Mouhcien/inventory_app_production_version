@@ -1039,6 +1039,24 @@ $(function(){
 
     });
 
+    /** short ************************************* */
+
+    $("#btn_short_type_consumable_id").on('click', function(){
+        const value = $("#short_type_consumable_id").val();
+        let url = '/furnitures/stocks/short/?fltr=type&val='+value;
+
+        window.location.href = url;
+
+    });
+
+    $("#btn_short_consumable_id").on('click', function(){
+        const value = $("#short_consumable_id").val();
+        let url = '/furnitures/stocks/short/?fltr=consumable&val='+value;
+
+        window.location.href = url;
+
+    });
+
     /** ********************************************************** **/
     $("#sl_inv_employee_id").on('change', function(){
 
