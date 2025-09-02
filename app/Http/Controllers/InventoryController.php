@@ -642,7 +642,15 @@ class InventoryController extends Controller
 
     public function export_photocopies() {
         try {
-            return $this->exportInventoryPhotocopy($this->inventoryPhotocopyService, null);
+            return $this->exportInventoryPhotocopy($this->inventoryPhotocopyService,$this->materialService, null);
+        }catch(\Exception $exception) {
+
+        }
+    }
+
+    public function export_vacant_photocopies() {
+        try {
+            return $this->exportInventoryPhotocopy($this->inventoryPhotocopyService, $this->materialService, 'vacant');
         }catch(\Exception $exception) {
 
         }

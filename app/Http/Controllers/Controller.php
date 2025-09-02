@@ -282,46 +282,87 @@ abstract class Controller
         }
     }
 
-    public function exportInventoryPhotocopy(InventoryPhotocopyService $inventoryPhotocopyService) {
+    public function exportInventoryPhotocopy(InventoryPhotocopyService $inventoryPhotocopyService, MaterialService $materialService, $option=null) {
         try {
 
             //['Série', 'Type', 'Modèle', 'Marque', 'Marché', 'N° Inventaire', 'Service', 'Entité', 'Secteur', 'Section', 'Local' 'IP', 'Etats', 'Déployé', 'Réformé', 'Obsérvations']
 
-            $inventories = $inventoryPhotocopyService->getAllInventories(0);
-
             $materialData = [];
             $data = [];
-            foreach ($inventories as $inventory) {
-                $materialData[0] = $inventory->material->serial;
-                $materialData[1] = $inventory->material->delivery_material->model_material->type_material->title;
-                $materialData[2] = $inventory->material->delivery_material->model_material->title;
-                $materialData[3] = $inventory->material->delivery_material->model_material->brand_material->title ?? "";
-                $materialData[4] = $inventory->material->delivery_material->march_material->title;
-                $materialData[5] = $inventory->material->inventory_number;
-                $materialData[6] = $inventory->service_entity->title;
-                $materialData[7] = $inventory->entity ? $inventory->entity->title : '';
-                $materialData[8] = $inventory->secter_entity ? $inventory->secter_entity->title : '';
-                $materialData[9] = $inventory->section_entity ? $inventory->section_entity->title : '';
-                $materialData[10] = $inventory->local->title;
-                $materialData[11] = $inventory->material->ip;
-                if ($inventory->material->state == 1)
-                    $materialData[12] = "Opérationnel";
-                elseif ($inventory->material->state == -1)
-                    $materialData[12] = "En Panne";
-                elseif ($inventory->material->state == -2)
-                    $materialData[12] = "En Casse";
-                $materialData[13] = $inventory->material->is_deployed ? 'OUI' : 'NON';
-                $materialData[14] = $inventory->material->is_reform ? 'OUI' : 'NON';
-                $materialData[15] = "";
-                if(count($inventory->material->observations_material) != 0) {
-                    $observations_object = "";
-                    foreach ($inventory->material->observations_material as $observation) {
-                        $observations_object .= "[".$observation->object."]".$observation->object." - ";
+
+            if ($option != null){
+                $inventories = $materialService->getPhotocopiesNotAffectedToUser(0);
+
+                foreach ($inventories as $inventory) {
+                    $materialData[0] = $inventory->serial;
+                    $materialData[1] = $inventory->delivery_material->model_material->type_material->title;
+                    $materialData[2] = $inventory->delivery_material->model_material->title;
+                    $materialData[3] = $inventory->delivery_material->model_material->brand_material->title ?? "";
+                    $materialData[4] = $inventory->delivery_material->march_material->title;
+                    $materialData[5] = $inventory->inventory_number;
+                    $materialData[6] = "";
+                    $materialData[7] = "";
+                    $materialData[8] = "";
+                    $materialData[9] = "";
+                    $materialData[10] = "";
+                    $materialData[11] = $inventory->ip;
+                    if ($inventory->state == 1)
+                        $materialData[12] = "Opérationnel";
+                    elseif ($inventory->state == -1)
+                        $materialData[12] = "En Panne";
+                    elseif ($inventory->state == -2)
+                        $materialData[12] = "En Casse";
+                    $materialData[13] = $inventory->is_deployed ? 'OUI' : 'NON';
+                    $materialData[14] = $inventory->is_reform ? 'OUI' : 'NON';
+                    $materialData[15] = "";
+                    if(count($inventory->observations_material) != 0) {
+                        $observations_object = "";
+                        foreach ($inventory->observations_material as $observation) {
+                            $observations_object .= "[".$observation->object."]".$observation->object." - ";
+                        }
+                        $materialData[16] = $observations_object;
                     }
-                    $materialData[16] = $observations_object;
+                    $data[] = $materialData;
                 }
-                $data[] = $materialData;
+
+            } else {
+                $inventories = $inventoryPhotocopyService->getAllInventories(0);
+
+                foreach ($inventories as $inventory) {
+                    $materialData[0] = $inventory->material->serial;
+                    $materialData[1] = $inventory->material->delivery_material->model_material->type_material->title;
+                    $materialData[2] = $inventory->material->delivery_material->model_material->title;
+                    $materialData[3] = $inventory->material->delivery_material->model_material->brand_material->title ?? "";
+                    $materialData[4] = $inventory->material->delivery_material->march_material->title;
+                    $materialData[5] = $inventory->material->inventory_number;
+                    $materialData[6] = $inventory->service_entity->title;
+                    $materialData[7] = $inventory->entity ? $inventory->entity->title : '';
+                    $materialData[8] = $inventory->secter_entity ? $inventory->secter_entity->title : '';
+                    $materialData[9] = $inventory->section_entity ? $inventory->section_entity->title : '';
+                    $materialData[10] = $inventory->local->title;
+                    $materialData[11] = $inventory->material->ip;
+                    if ($inventory->material->state == 1)
+                        $materialData[12] = "Opérationnel";
+                    elseif ($inventory->material->state == -1)
+                        $materialData[12] = "En Panne";
+                    elseif ($inventory->material->state == -2)
+                        $materialData[12] = "En Casse";
+                    $materialData[13] = $inventory->material->is_deployed ? 'OUI' : 'NON';
+                    $materialData[14] = $inventory->material->is_reform ? 'OUI' : 'NON';
+                    $materialData[15] = "";
+                    if(count($inventory->material->observations_material) != 0) {
+                        $observations_object = "";
+                        foreach ($inventory->material->observations_material as $observation) {
+                            $observations_object .= "[".$observation->object."]".$observation->object." - ";
+                        }
+                        $materialData[16] = $observations_object;
+                    }
+                    $data[] = $materialData;
+                }
             }
+
+
+
             $date = new DateTime();
             $current_date =  $date->format('Y-m-d H:i:s');
             return Excel::download(new InventoryPhotocopyExport($data), 'inventaire_photocopies_'.$current_date.'.xlsx');

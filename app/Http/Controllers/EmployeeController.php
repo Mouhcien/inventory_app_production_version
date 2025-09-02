@@ -419,6 +419,9 @@ class EmployeeController extends Controller
                     $data['entity_id'] = $section->entity->id;
                     $data['section_entity_id'] = $section_id;
                     $data['secter_entity_id'] = null;
+                }else{
+                    $data['section_entity_id'] = null;
+                    $data['secter_entity_id'] = null;
                 }
 
                 if ($secter_id != 0) {
@@ -427,6 +430,9 @@ class EmployeeController extends Controller
                     $data['entity_id'] = $secter->entity->id;
                     $data['secter_entity_id'] = $secter_id;
                     $data['section_entity_id'] = null;
+                }else{
+                    $data['section_entity_id'] = null;
+                    $data['secter_entity_id'] = null;
                 }
                 $result     = $this->employeeService->updateEmployeeProfInfo($employee, $data);
             }

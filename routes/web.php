@@ -517,6 +517,8 @@ Route::prefix("inventories")->group(function () {
 
     Route::get('/photocopies/export', [InventoryController::class, 'export_photocopies'])->name('inventories.photocopies.export');
 
+    Route::get('/photocopies/vacant/export', [InventoryController::class, 'export_vacant_photocopies'])->name('inventories.photocopies..vacant.export');
+
     Route::get('/photocopies/vacant', [InventoryController::class, 'vacant_photocopies'])->name('inventories.photocopies.vacant');
 
     Route::post('/photocopies/update/{id}', [InventoryController::class, 'photocopies_update'])->name('inventories.photocopies.update');

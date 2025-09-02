@@ -10,13 +10,18 @@
                 </div>
                 <div class="col-6">
                     <a href="{{route('inventories.photocopies.vacant')}}" class="text-dark" ><i class="bi bi-arrow-down-circle"></i> Les photocopies vacants</a>
-                    <a href="{{route('inventories.photocopies.export')}}" class="text-primary float-end" ><i class="bi bi-download"></i> Télécharger la liste des photocopies</a>
+
+                    @if ($option == "photocopy_vacant")
+                        <a href="{{route('inventories.photocopies..vacant.export')}}" class="text-primary float-end" ><i class="bi bi-download"></i> Télécharger la liste des photocopies</a>
+                    @else
+                        <a href="{{route('inventories.photocopies.export')}}" class="text-primary float-end" ><i class="bi bi-download"></i> Télécharger la liste des photocopies</a>
+                    @endif
                 </div>
             </div>
         </div>
         <div class="card-body border-primary shadow-lg">
             @if (is_null($option))
-            <x-inventory-photocopy-row :inventories="$photocopies" />
+                <x-inventory-photocopy-row :inventories="$photocopies" />
             @else
                 <x-material-row :materials="$photocopies" />
             @endif
