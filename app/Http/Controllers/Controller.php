@@ -94,7 +94,7 @@ abstract class Controller
     public function exportInventoryMaterials(InventoryService $inventoryService, $filter=null, $value=null) {
         try {
 
-            //['Série', 'Type', 'Modèle', 'Marque', 'Marché', 'N° Inventaire','Utilisateur', 'Service', 'Entité', 'Secteur', 'Section', 'Local' 'IP', 'Etats', 'Déployé', 'Réformé', 'Obsérvations']
+            //['PPR', 'Série', 'Type', 'Modèle', 'Marque', 'Marché', 'N° Inventaire','Utilisateur', 'Service', 'Entité', 'Secteur', 'Section', 'Local' 'IP', 'Etats', 'Déployé', 'Réformé', 'Obsérvations']
 
             if (session()->has('inventories_filtered')) {
                 $inventories = session()->get('inventories_filtered');
@@ -128,34 +128,35 @@ abstract class Controller
             $materialData = [];
             $data = [];
             foreach ($inventories as $inventory) {
-                $materialData[0] = $inventory->material->serial;
-                $materialData[1] = $inventory->material->delivery_material->model_material->type_material->title;
-                $materialData[2] = $inventory->material->delivery_material->model_material->title;
-                $materialData[3] = $inventory->material->delivery_material->model_material->brand_material->title ?? "";
-                $materialData[4] = $inventory->material->delivery_material->march_material->title;
-                $materialData[5] = $inventory->material->inventory_number;
-                $materialData[6] = $inventory->employee->firstname." ".$inventory->employee->lastname;
-                $materialData[7] = $inventory->employee->service_entity->title;
-                $materialData[8] = $inventory->employee->entity ? $inventory->employee->entity->title : '';
-                $materialData[9] = $inventory->employee->secter_entity ? $inventory->employee->secter_entity->title : '';
-                $materialData[10] = $inventory->employee->section_entity ? $inventory->employee->section_entity->title : '';
-                $materialData[11] = $inventory->employee->local->title;
-                $materialData[12] = $inventory->material->ip;
+                $materialData[0] = $inventory->employee->ppr;
+                $materialData[1] = $inventory->material->serial;
+                $materialData[2] = $inventory->material->delivery_material->model_material->type_material->title;
+                $materialData[3] = $inventory->material->delivery_material->model_material->title;
+                $materialData[4] = $inventory->material->delivery_material->model_material->brand_material->title ?? "";
+                $materialData[5] = $inventory->material->delivery_material->march_material->title;
+                $materialData[6] = $inventory->material->inventory_number;
+                $materialData[7] = $inventory->employee->firstname." ".$inventory->employee->lastname;
+                $materialData[8] = $inventory->employee->service_entity->title;
+                $materialData[9] = $inventory->employee->entity ? $inventory->employee->entity->title : '';
+                $materialData[10] = $inventory->employee->secter_entity ? $inventory->employee->secter_entity->title : '';
+                $materialData[11] = $inventory->employee->section_entity ? $inventory->employee->section_entity->title : '';
+                $materialData[12] = $inventory->employee->local->title;
+                $materialData[13] = $inventory->material->ip;
                 if ($inventory->material->state == 1)
-                    $materialData[13] = "Opérationnel";
+                    $materialData[14] = "Opérationnel";
                 elseif ($inventory->material->state == -1)
-                    $materialData[13] = "En Panne";
+                    $materialData[14] = "En Panne";
                 elseif ($inventory->material->state == -2)
-                    $materialData[13] = "En Casse";
-                $materialData[14] = $inventory->material->is_deployed ? 'OUI' : 'NON';
-                $materialData[15] = $inventory->material->is_reform ? 'OUI' : 'NON';
-                $materialData[16] = "";
+                    $materialData[14] = "En Casse";
+                $materialData[15] = $inventory->material->is_deployed ? 'OUI' : 'NON';
+                $materialData[16] = $inventory->material->is_reform ? 'OUI' : 'NON';
+                $materialData[17] = "";
                 if(count($inventory->material->observations_material) != 0) {
                     $observations_object = "";
                     foreach ($inventory->material->observations_material as $observation) {
                         $observations_object .= "[".$observation->object."]".$observation->object." - ";
                     }
-                    $materialData[16] = $observations_object;
+                    $materialData[17] = $observations_object;
                 }
                 $data[] = $materialData;
             }

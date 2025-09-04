@@ -30,6 +30,6 @@ class InventoryExport implements FromCollection, WithHeadings
 
     public function headings(): array
     {
-        return ['Série', 'Type', 'Modèle', 'Marque', 'Marché', 'N° Inventaire','Utilisateur', 'Service', 'Entité', 'Secteur', 'Section', 'Local', 'IP', 'Etats', 'Déployé', 'Réformé', 'Obsérvations'];
+        return ['PPR', 'Série', 'Type', 'Modèle', 'Marque', 'Marché', 'N° Inventaire','Utilisateur', 'Service', 'Entité', 'Secteur', 'Section', 'Local', 'IP', 'Etats', 'Déployé', 'Réformé', 'Obsérvations'];
     }
 }
